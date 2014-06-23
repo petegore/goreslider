@@ -1,0 +1,34 @@
+/**** GoreSlider CSS ****/
+
+
+
+.goreslider {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px; 
+    background-size: 100% 100%;
+}
+
+.goreslider img:not(.control-img) {
+    padding: 5px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 1px solid #DEDEDE;
+}
+
+.goreslider-control {
+    position: absolute;
+    bottom: 0;
+}
+
+.goreslider .goreslider-control .goreslider-control-thumb img {
+    max-height: 100px;
+    padding: 0;
+    margin: 3px;
+}
+
+.goreslider .goreslider-control .goreslider-control-thumb.active img {
+    border: 2px solid black;
+}
