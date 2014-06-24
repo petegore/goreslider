@@ -24,35 +24,63 @@
                 paused: false,
                 stop: false,
                 maxHeight: 0,
-                maxWidth: 0,
+                sliderWidth: 0,
+                picturesWidth: 0,
                 sources: new Array(),
             };
             
             var slider = $(this);
             slider.data('goreslider:vars', vars);
             slider.addClass('goreslider');
-            vars.maxWidth = slider.parent().width(); // MaxWidth is based on slider first parent's
+            
+            // Defining max sizes
+            var containerWidth = slider.parent().width();
+            vars.sliderWidth = (settings.maxWidth === "auto") ? containerWidth : Math.min(containerWidth, settings.maxWidth);
+            vars.picturesWidth = (settings.maxWidth === "auto") ? Math.min(containerWidth, settings.maxPicturesWidth) : Math.min(containerWidth, settings.maxWidth, settings.maxPicturesWidth);
             
             // Templates
-            var titleTemplate = $('<div class="goreslider-title"><p></p></div>');            
-            var controlTemplate = $('<div class="goreslider-control"></div>');
-            var slideThumbTemplate = '<a class="goreslider-control-thumb" data-index="__REL_ID__"><img class="control-img" src="__IMG_SRC__"/></a>';
+            var titleTemplate           = $('<div class="goreslider-title"><p></p></div>');
+            var pauseImageTemplate      = $('<div class="goreslider-pause"></div>');
+            var previousButtonTemplate  = $('<div class="goreslider-previous" title="Previous"></div>');
+            var nextButtonTemplate      = $('<div class="goreslider-next" title="Next"></div>');
+            var controlTemplate         = $('<div class="goreslider-control"></div>');
+            var slideThumbTemplate      = '<a class="goreslider-control-thumb" data-index="__REL_ID__"><img class="control-img" src="__IMG_SRC__"/></a>';
             
             // Getting slider & slides
             var slider = $(this);
             var kids = slider.children('img:not(.control-img)', slider);
             
             // Looping on imgs to find biggest height/width & storing all sources
-            kids.each(function() {
+            kids.each(function(index) {
                 var child = $(this);
-                child.attr('data-index', vars.totalSlides);
-                child.width = vars.maxWidth;
+                
+                child.attr('data-index', index);
+                child.width = vars.picturesWidth;
                 if (child.height() > vars.maxHeight) vars.maxHeight = child.height();
                 vars.sources.push(child.attr('src'));
                 vars.totalSlides++;
                 
-                child.css('opacity', '0');    // Hiding all slides before starting the animation
+                child.css('left', ((vars.sliderWidth - vars.picturesWidth - 2 * settings.picturesPadding) / 2) + 'px');
+                child.css('padding', settings.picturesPadding + 'px');
+                if (index > 0) child.css('opacity', '0');    // Hiding all slides before starting the animation
             });
+            
+            // Adding previous and next buttons (& pause)
+            slider.prepend(previousButtonTemplate);
+            slider.prepend(nextButtonTemplate);
+            slider.prepend(pauseImageTemplate);
+            $(".goreslider-previous, .goreslider-next").width((vars.sliderWidth - (vars.picturesWidth + settings.picturesPadding * 2)) / 2);
+            $('.goreslider-next', slider).on('click', function(){
+                clearInterval(timer);
+                timer = '';
+                goresliderRun(slider, kids, settings, 'next');
+            });
+            $('.goreslider-previous', slider).on('click', function(){
+                clearInterval(timer);
+                timer = '';
+                goresliderRun(slider, kids, settings, 'previous');
+            });
+
             
             // Setting slider size
             slider.height(vars.maxHeight);
@@ -87,22 +115,24 @@
                 }
                 
                 // Resizing the thumbnails (keeping 10px between each)
-                var width = ((slider.width() - (10 * vars.totalSlides - 1)) / vars.totalSlides);
+                var width = ((slider.width() - ((10 + 4) * vars.totalSlides)) / vars.totalSlides); /* 5px padding & 2px border */
                 $('.goreslider-control-thumb img').width(width);
-                $('.goreslider-control').css('bottom', "-" + $('.goreslider-control').height() + "px");
+                var ctrlHeight = $('.goreslider-control').height() + 20;
+                $('.goreslider-control').css('bottom', "-" + ctrlHeight + "px");
+                slider.css('margin-bottom', (ctrlHeight + 20) + "px");
 
                 // Set active the button corresponding to the current slide
                 $('.goreslider-control a:eq('+ vars.currentIndex +')', slider).addClass('active');
 
                 // If clicking on a control : we set the clicked side as current and run the slider from 0
                 $('.goreslider-control a', slider).on('click', function(){
-                    //if(vars.running) return false;
                     if($(this).hasClass('active')) return false;
                     clearInterval(timer);
                     timer = '';
-                    vars.currentSlide = $(this).attr('data-index') - 1;
+                    vars.currentIndex = $(this).attr('data-index');
                     goresliderRun(slider, kids, settings, 'control');
                 });
+                
             }
 
             // If autopause is true, stopping the slider at hover
@@ -111,11 +141,13 @@
                     vars.paused = true;
                     clearInterval(timer);
                     timer = '';
+                    $(".goreslider-pause").show();
                 }, function(){
                     vars.paused = false;
                     if(timer === '' && settings.auto){
-                      timer = setInterval(function(){ goresliderRun(slider, kids, settings, false); }, settings.sliderDelay);
+                        timer = setInterval(function(){ goresliderRun(slider, kids, settings, false); }, settings.sliderDelay);
                     }
+                    $(".goreslider-pause").hide();
                 });
             }
 
@@ -127,7 +159,12 @@
                 }
                 settings.aChange.call(this);
             });
+            
+            
         });
+
+
+
 
 
         // Main function : starting to run the slider
@@ -142,8 +179,8 @@
             if(!nudge){
                 vars.currentIndex++;
             } else {
-                if(nudge === 'prev'){
-                    vars.currentIndex--;
+                if(nudge === 'previous'){
+                    vars.currentIndex = (vars.currentIndex - 1 < 0) ? (vars.totalSlides - 1) : (vars.currentIndex - 1);
                 }
                 if(nudge === 'next'){
                     vars.currentIndex++;
@@ -202,6 +239,9 @@
         auto: true,
         autoPause: true,   
         speedStrip: 500,
+        maxWidth: "auto",
+        maxPicturesWidth: 600,
+        picturesPadding: 5,
         sliderDelay: 3000,   
         effect:'fade',
         transparencytitle: 0.8,    
