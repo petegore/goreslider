@@ -49,7 +49,6 @@ A simple call on the element you want to "goreslide".
 ```Javascript
 $('#operation-slider img').hide();  // Hiding images during their load
 $(window).load(function(){
-    $('#operation-slider img').show();
     $('#operation-slider').goreslider({
         // Params
     });
@@ -62,8 +61,8 @@ Let's have a look at the different options you can use through an example. Here 
 
 ```Javascript
 $(window).load(function(){
-    $('#operation-slider img').show();
     $('#operation-slider').goreslider({
+        hideMePlease: true,             // Hide the image during their load before the slider is ready
         auto: true,                     // Autorun one loaded
         autoPause: true,                // Autostop when mouse hover
         speedStrip: 500,                // Transition duration between pictures

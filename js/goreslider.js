@@ -31,6 +31,11 @@
             var slider = $(this);
             slider.data('goreslider:vars', vars);
             
+            // quickly hiding huge image before loading the slider
+            if (settings.hideMePlease === true){
+                slider.find('img').hide();
+            }
+            
             // Defining max sizes
             var containerWidth = slider.parent().width();
             vars.sliderWidth = (settings.maxWidth === "auto") ? containerWidth : Math.min(containerWidth, settings.maxWidth);
@@ -61,6 +66,7 @@
             
             // Looping on imgs to find biggest height/width & storing all sources
             var zIndex = kids.length;
+            var childIndex = 0;
             kids.each(function(index) {
                 var child = $(this);
                 
@@ -83,6 +89,9 @@
                 child.css('left', ((vars.sliderWidth - child.width() - 2 * settings.picturesPadding) / 2) + 'px');
                 child.css('padding', settings.picturesPadding + 'px');
                 if (index > 0) child.css('opacity', '0');    // Hiding all slides before starting the animation
+                
+                // showing the first picture instantly
+                if (childIndex === 0) child.show();
             });
             
             // Adding previous and next buttons (& pause)
@@ -208,13 +217,13 @@
                     vars.paused = true;
                     clearInterval(timer);
                     timer = '';
-                    $(".goreslider-pause").show();
+                    $(".goreslider-pause").addClass('pause');
                 }, function(){
                     vars.paused = false;
                     if(timer === '' && settings.auto){
                         timer = setInterval(function(){ goresliderRun(slider, kids, settings, false); }, settings.sliderDelay);
                     }
-                    $(".goreslider-pause").hide();
+                    $(".goreslider-pause").removeClass('pause');
                 });
             }
 
@@ -301,6 +310,7 @@
   
   
     $.fn.goreslider.defaults = {
+        hideMePlease: true,
         auto: true,
         autoPause: true,   
         speedStrip: 500,

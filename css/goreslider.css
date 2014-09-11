@@ -43,10 +43,12 @@
 
 .goreslider-pause {
     height:14px;
-    background-position: left top;
+    background-position: left 999px;
     background-image: url('../images/pause_s.png');
     background-repeat: no-repeat;
-    display: none; /* will be changed with JS */
+}
+.goreslider-pause.pause {
+    background-position: left top;
 }
 .goreslider-pause:not(td) {
     width: 14px;
