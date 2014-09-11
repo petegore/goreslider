@@ -1,11 +1,14 @@
-GoreSlider
+GoreSlider v1.0
 ==========
 
 GoreSlider is a basic image slider compatible with IE6.
 It requires jQuery.
 
+## Example
+See an example online : http://git.petegore.fr/goreslider/example
+
 ## How does it work ?
-GoreSlider can create a slider using basic <div> tags, or <table> tag for better IE compatibility.
+GoreSlider can create a slider using basic div tags, or table tag for better IE compatibility.
 Just create a container and put your pictures on it.
 
 ## How to use
