@@ -1,9 +1,9 @@
 /**** GoreSlider CSS ****/
 
-
-
 .goreslider {
     position: relative;
+    
+    z-index:1;
     width: 100%;
     margin-top: 20px;
     margin-bottom: 20px; /* updated in JS */
@@ -61,15 +61,19 @@
     bottom: 0;
 }
 
-.goreslider .goreslider-control .goreslider-control-thumb img {
-    border: 2px solid transparent; /* l'épaisseur doit être répercutée sur le JS */
+.goreslider .goreslider-control a.goreslider-control-thumb {
+    border: 2px solid transparent;  /* l'épaisseur doit être répercutée sur le JS */
+    background-position: center center;
+    background-repeat: no-repeat;
+    display: inline;
+    zoom: 1;
     max-height: 100px;
     padding: 0;
     margin: 3px;
 }
 
-.goreslider .goreslider-control .goreslider-control-thumb.active img,
-.goreslider .goreslider-control .goreslider-control-thumb:hover img{
+.goreslider .goreslider-control .goreslider-control-thumb.active,
+.goreslider .goreslider-control .goreslider-control-thumb:hover{
     border-color: #333333;
     cursor: pointer;
 }

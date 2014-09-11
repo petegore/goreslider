@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>GoreSlider - Example</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body {
+                min-height: 600px;
+                background-color: #EFEFEF;
+                background: linear-gradient(#EFEFEF, #FFFFFF) no-repeat;
+            }
+            .slider-container {
+                width: 800px;
+                margin: auto;
+            }
+        </style>
+        
+        <!-- Step 1 : including the GoreSlider CSS - possibility to also include the IE6-friendly CSS -->
+        <link rel="stylesheet" href="../css/goreslider.css"/>
+        <!--[if lte IE 8]>
+            <link rel="stylesheet" href="{{ asset('./css/goreslider-ie6.css') }}">
+        <![endif]-->
+        
+    </head>
+    <body>
+        <div>
+            <h1>GoreSlider</h1>
+        </div>
+        
+        <div>
+            <h2>Basic "div" GoreSlider</h2>
+            <div class="slider-container">
+                <div id="my-slider">
+                    <img src="pictures/picture_1.jpg"/>
+                    <img src="pictures/picture_2.jpg"/>
+                    <img src="pictures/picture_3.jpg"/>
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            <h2>Table GoreSlider</h2>
+            <div class="slider-container">
+                <div id="my-table-slider">
+                    <img src="pictures/picture_1.jpg"/>
+                    <img src="pictures/picture_2.jpg"/>
+                    <img src="pictures/picture_3.jpg"/>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 2 : including jQuery & GoreSlider -->
+        <script src="../js/jquery.js"></script>
+        <script src="../js/goreslider.js"></script>
+        
+        <!-- Step 3 : goresliding ! -->
+        <script>
+            $('.slider-container img').hide();  // Hiding images during their load
+            //$('#my-slider').goreslider({});
+            $('#my-table-slider').goreslider({
+                table: true
+            });
+        </script>
+    </body>
+</html>
