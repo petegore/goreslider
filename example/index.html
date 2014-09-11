@@ -29,20 +29,9 @@
         </div>
         
         <div>
-            <h2>Basic "div" GoreSlider</h2>
+            <h2>Basic GoreSlider</h2>
             <div class="slider-container">
                 <div id="my-slider">
-                    <img src="pictures/picture_1.jpg"/>
-                    <img src="pictures/picture_2.jpg"/>
-                    <img src="pictures/picture_3.jpg"/>
-                </div>
-            </div>
-        </div>
-        
-        <div>
-            <h2>Table GoreSlider</h2>
-            <div class="slider-container">
-                <div id="my-table-slider">
                     <img src="pictures/picture_1.jpg"/>
                     <img src="pictures/picture_2.jpg"/>
                     <img src="pictures/picture_3.jpg"/>
@@ -57,8 +46,7 @@
         <!-- Step 3 : goresliding ! -->
         <script>
             $('.slider-container img').hide();  // Hiding images during their load
-            //$('#my-slider').goreslider({});
-            $('#my-table-slider').goreslider({
+            $('#my-slider').goreslider({
                 table: true
             });
         </script>
